@@ -1,0 +1,181 @@
+{% extends "layout.html" %}
+{% block title %}
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title> Game of Life </title>
+{% endblock %}
+
+
+{% block body %}
+
+<body>
+	
+	<div style="display: flex; flex: 2 1 auto;">
+		<div onmousedown="changeColour(event)" style="margin: auto;">
+			<canvas id="myCanvas" width="200" height="200" style="border:5px solid"></canvas>
+		</div>
+		<div style="align-items: center;margin: 7% 6% 6% 6%;background-color: rgb(168, 208, 182);padding: 3% 4% 5% 4%;border-radius: 1rem;background-image: linear-gradient(180deg, rgb(156, 218, 118), rgb(144, 216, 225));">
+			<h1 style="text-align: center;">Set Grid</h1>
+			<form onsubmit="return false" id = "resgistrationform">
+				<table style="margin-bottom: 1rem;">
+					<tr>
+						<td><label for="rows"><h1 style="margin-bottom: 0.5rem;font-size: 1.1rem;">Rows :</h1></label></td>
+						<td><input type="number" id="rows" style="padding: 8px 20px;margin: 0.2rem 0;display: inline-block;border: 1px solid #ccc;border-radius: 4px;box-sizing: border-box;"></td>
+					</tr>
+					<tr>
+						<td><label for="columns"><h1 style="margin-bottom: 0.5rem;font-size: 1.1rem;">Columns : </h1></label></td>
+						<td><input type="number" id="columns" style="padding: 8px 20px;margin: 0.2rem 0;display: inline-block;border: 1px solid #ccc;border-radius: 4px;box-sizing: border-box;" name="columns"></td>
+					</tr>
+				</table>
+				<input type="submit"  style="padding: 8px 20px;margin: 0.5rem 0;display: inline-block;border: 1px solid #ccc;border-radius: 4px;box-sizing: border-box;width: 100%;font-size: 1.1rem;" value="Set" onclick="changeRowsAndColumns()">
+			</form>
+			<br><br>
+			<div style="display: flex;margin-top: 2rem;">
+				<div><form onsubmit="return false"><input type="submit" style="padding: 8px 20px;margin: 8px 0;display: inline-block;border: 1px solid #ccc;border-radius: 4px;box-sizing: border-box;font-size: 1.1rem;width: 100%;margin-right: 3.8rem;" value="Pause" onclick="pause()"></form></div>
+				<div><form onsubmit="return false"><input type="submit" style="padding: 8px 20px;margin: 8px 0;display: inline-block;border: 1px solid #ccc;border-radius: 4px;box-sizing: border-box;font-size: 1.1rem;width: 100%;margin-right: 3.8rem;" value="Resume" onclick="resume()"></form></div>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		let canvas = document.getElementById("myCanvas");
+		let context = canvas.getContext("2d");
+
+		let maxHeight = 600;
+		let maxWidth = 900;
+
+		let grid;
+		let rows = 20;
+		let cols = 30;
+		let resolution = 30;
+		
+		let paused = false;
+
+		let clickDown = false;
+
+		function createGrid(rows, cols){
+			let arr = new Array(cols);
+			for(let i = 0; i < cols; i++){
+				arr[i] = new Array(rows);
+			}
+			return arr;
+		}
+
+		function setGrid(){
+			canvas.width = cols*resolution;
+			canvas.height = rows*resolution;
+			for(let i = 0; i < cols; i++){
+				for(let j = 0; j < rows; j++){
+					grid[i][j]=Math.floor(Math.random() * 2);
+				}
+			}
+		}
+
+		grid = createGrid(rows,cols);
+		setGrid(grid);
+
+
+		function countAliveNeighbours(x, y){
+			x = parseInt(x);
+			y = parseInt(y);
+			let ans = 0;
+			for(let i = -1; i < 2; i++){
+				for(let j = -1; j < 2; j++){
+					ans += grid[(x+i+cols)%cols][(y+j+rows)%rows];
+				}
+			}
+			ans -= grid[x][y];
+
+			return ans;
+		}
+
+		function nextState(prev){
+			let next = createGrid(rows, cols);
+			for(let i = 0; i < cols; i++){
+				for(let j = 0; j < rows; j++){
+					let aliveNeighbours = countAliveNeighbours(i,j);
+					if(prev[i][j] == 1){
+						if((aliveNeighbours>=2)&&(aliveNeighbours<=3)) next[i][j]=1;
+						else next[i][j]=0;
+					}
+					else{
+						if(aliveNeighbours==3) next[i][j]=1;
+						else next[i][j]=0;
+					}
+				}
+			}
+			return next;
+		}
+
+		function displayGrid(){
+			for(let i = 0; i < cols; i++){
+				for(let j = 0; j < rows; j++){
+					let x = i*resolution;
+					let y = j*resolution;
+					context.beginPath();
+					if(grid[i][j]==1) context.fillStyle = "blue";
+					else context.fillStyle = "yellow";
+					context.rect(x, y, resolution, resolution);
+					context.fill();
+					context.closePath();
+				}
+			}
+			for(let i = 1; i < cols; i++){
+				context.beginPath();
+				context.fillStyle = "black";
+				context.fillRect(i*resolution, 0, 0.5, rows*resolution);
+				context.closePath();
+    		}
+
+			for(let i = 1; i < rows; i++){
+				context.beginPath();
+				context.fillStyle = "black";
+				context.rect(0, i*resolution, cols*resolution, 0.5);
+				context.fill();
+				context.closePath();
+			}
+		}
+
+		function changeRowsAndColumns(){
+			paused = true;
+			rows = parseInt(document.getElementById("rows").value);
+			cols = parseInt(document.getElementById("columns").value);
+			resolution = (Math.min((maxHeight/rows),(maxWidth/cols)));
+			grid = createGrid(rows, cols);
+			setGrid();
+		}
+
+		function gameLoop(){
+			context.clearRect(0, 0, cols*resolution, rows*resolution);
+
+			displayGrid();
+			if(! paused){
+				grid = nextState(grid);
+			}
+		}
+
+		function pause(){
+			paused = true;
+		}
+
+		function resume(){
+			paused = false;
+		}
+
+		setInterval(gameLoop,50);
+
+		function changeColour(event){
+			if(paused){
+				let rect = canvas.getBoundingClientRect();
+				let x = event.clientX - rect.left;
+				let y = event.clientY - rect.top;
+				let col = Math.floor(x / resolution);
+				let row = Math.floor(y / resolution);
+				grid[col][row] ^= 1;
+			}
+		}
+
+	</script>
+</body>
+{% endblock %}
