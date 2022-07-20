@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- <link rel="stylesheet" href="style.css"> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{% block title %} {% endblock %}
+	<style>
+*{
+	border: 0%;
+	margin: 0%;
+	box-sizing: border-box;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+.welcome{
+	font-size: 2.5rem;
+	flex: 1 1 40rem;
+	color:white;
+}
+.head{
+	background: #131c21;
+	/* position: sticky; */
+	top: 0%;
+	/* border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px; */
+}
+.header{
+	display: flex;
+	height: 10vh;
+	margin-left: 2%;
+	align-items: center;
+	box-shadow: 0px 0px 20px rgba(0,0, 0, 0.5);
+	justify-content: center;
+}
+.header1{
+	display: flex;
+	height: 10vh;
+	margin-left: 0%;
+	align-items: center;
+	box-shadow: 0px 0px 20px rgba(0,0, 0, 0.5);
+	justify-content: center;
+}
+.head1{
+	color: white;
+	font-size: 20px;
+	margin: 10px 30px;
+}
+.head2{
+	color: black;
+	font-size: 24px;
+	margin: 10px 250px;
+}
+
+/* Dropdown Button */
+.dropbtn {
+		background-color: #3498DB;
+		color: white;
+		padding: 16px;
+		font-size: 16px;
+		border: none;
+		cursor: pointer;
+	}
+	
+	/* Dropdown button on hover & focus */
+	.dropbtn:hover, .dropbtn:focus {
+		background-color: #2980B9;
+	}
+	
+	/* The container <div> - needed to position the dropdown content */
+	.dropdown {
+		position: relative;
+		display: inline-block;
+	}
+	
+	/* Dropdown Content (Hidden by Default) */
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f1f1f1;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 1;
+	}
+	
+	/* Links inside the dropdown */
+	.dropdown-content a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+	}
+	
+	/* Change color of dropdown links on hover */
+	.dropdown-content a:hover {background-color: #ddd}
+	
+	/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+	.show {display:block;}
+	footer {
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		background-color: red;
+		color: white;
+		text-align: center;
+	}
+	</style>
+</head>
+
+<body>
+	<header>
+		<section class="head">
+			<nav class="header">
+				<h1 class="welcome">Hello</h1>
+				<h1 class="head1"><a href="/">Home</a></h1>
+				<h1 class="head1"><a href="#">Instructions</a></h1>
+				<div class="dropdown" style="margin-right: 80px;">
+					{% if current_user %}
+						<button onclick="myFunction()" class="dropbtn">{{current_user}}</button>
+						<div id="myDropdown" class="dropdown-content">
+							<a href="/users/{{current_user}}">Profile</a>
+							<a href="#">Link 2</a>
+							<a href="/logout">Logout</a>
+						</div>
+					{% else %}
+						<h1 class="head1"><a href="/login_signup">Login/Signup</a></h1>
+					{% endif %}
+				</div>
+				<!-- <a class="logout" href="Welcome.html"><i class="fa fa-sign-out" style="font-size:48px;color:white"></i></a> -->
+			</nav>
+		</section>
+	</header>
+
+
+{% block body %} {% endblock %}
+
+	<footer>
+		<section class="head" style="background-color: white;">
+			<nav class="header1" style="background-color: white;">
+				<h1 class="head2"><a href="#" style="color: black;">About Us</a></h1>
+				<h1 class="head2"><a href="/feedback" style="color: black;">Contact Us</a></h1>
+				<!-- <li><a href="#"><i class="fa fa-facebook-f" style="font-size:36px"></i></a></li>
+				<li><a href="#" class="ho"><i class="fa fa-instagram" style="font-size:36px;color:red"></i></a></li>
+				<li><a href="#" class="hi"><i class="fa fa-twitter" style="font-size:36px"></i></a></li> -->
+			</nav>
+		</section>
+	</footer>
+</body>
+<script>
+		/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function changeColor() {
+	document.getElementById("cell");
+
+}
+
+function myFunction() {
+	document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+	if (!event.target.matches('.dropbtn')) {
+		var dropdowns = document.getElementsByClassName("dropdown-content");
+		var i;
+		for (i = 0; i < dropdowns.length; i++) {
+			var openDropdown = dropdowns[i];
+			if (openDropdown.classList.contains('show')) {
+				openDropdown.classList.remove('show');
+			}
+		}
+	}
+}
+</script>
+</html>

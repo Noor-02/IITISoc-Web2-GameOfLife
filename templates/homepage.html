@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}
+<style>
+    .container {
+  position: relative;
+  width: 100%;
+}
+
+.container img {
+  width: 100%;
+  height: auto;
+}
+
+.container .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 55px;
+  padding: 40px 80px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.container .btn:hover {
+  background-color: black;
+}
+</style>
+<title>Homepage</title>
+{% endblock %}
+{% block body %}
+
+<body>
+    <div class="container">
+        <img src={{url_for('static', filename='fire-and-ice-with-spark-concept-on-black-background-free-video.jpg')}}>
+        <a href = "/Game_of_life" class="btn">P L A Y</a>
+    </div>
+</body>
+
+{% endblock %}
