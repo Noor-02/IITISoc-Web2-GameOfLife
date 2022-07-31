@@ -79,43 +79,44 @@ body{
 <body>    
 <h2 class="center">FEED BACK FORM</h2>    
 <div class="container">    
-  <form>    
-    <div class="row">    
-      <div class="col-25">    
-        <label for="fname">Full Name</label>    
-      </div>    
-      <div class="col-75">    
-        <input type="text" id="fname" name="fullname" placeholder="Your name..">    
-      </div>    
-    </div>    
-    <div class="row">    
-        <div class="col-25">    
-          <label for="email">Mail Id</label>    
-        </div>    
-        <div class="col-75">    
-          <input type="email" id="email" name="email" placeholder="Your mail id..">    
-        </div>    
-      </div>    
-    <div class="row">    
-      <div class="col-25">    
-        <label for="rating">Stars</label>    
-      </div>    
-      <div class="col-75">    
-        <select id="rating" name="stars">    
-          <option value="5">5</option>    
-          <option value="4">4</option>    
-          <option value="3">3</option>    
-          <option value="2">2</option>    
-          <option value="1">1</option>    
+  <form action = "/feedback" method="POST">
+    <div class="row">
+      <div class="col-25">
+        <label for="fname">Full Name</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="fname" name="fullname" placeholder="Your name..">
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+          <label for="email">Mail Id</label>
+        </div>
+        <div class="col-75">
+          <input type="email" id="email" name="email" placeholder="Your mail id..">
+        </div>
+      </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="rating">Stars</label>
+      </div>
+      <div class="col-75">
+        <select id="rating" name="stars">
+          <option value="rate us">rate us</option>
+          <option value="5">5</option>
+          <option value="4">4</option>
+          <option value="3">3</option>
+          <option value="2">2</option>
+          <option value="1">1</option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="col-25">
         <label for="feed_back">Feed Back</label>
-      </div> 
+      </div>
       <div class="col-75">
-        <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+        <textarea id="message" name="message" placeholder="Write something.." style="height:200px"></textarea>
       </div>    
     </div>    
     <div class="row">    
