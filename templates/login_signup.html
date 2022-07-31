@@ -190,6 +190,15 @@ form .btn input[type="submit"]{
 }
       </style>
    </head>
+   {% with messages = get_flashed_messages() %}
+  		{% if messages %}
+    	<ul class=flashes>
+    	{% for message in messages %}
+			<li>{{ message }}</li>
+    	{% endfor %}
+    	</ul>
+  		{% endif %}
+	{% endwith %}
    <body>
       <div class="wrapper">
          <div class="title-text">
@@ -219,6 +228,9 @@ form .btn input[type="submit"]{
                   <div class="pass-link">
                      <a href="#">Forgot password?</a>
                   </div>
+                  <div>
+                    <font color = "red"> {{error_message}} </font>
+                  </div>
                   <div class="field btn">
                      <div class="btn-layer"></div>
                      <input type="submit" value="Login" >
@@ -241,7 +253,7 @@ form .btn input[type="submit"]{
                      <input type="password" placeholder="Password" name = "password" required>
                   </div>
                   <div class="field">
-                     <input type="password" placeholder="Confirm password" name = "confirm_password"required>
+                     <input type="password" placeholder="Confirm password" name = "confirm_password" required>
                   </div>
                   <div class="field btn">
                      <div class="btn-layer"></div>

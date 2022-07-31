@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -9,6 +9,7 @@ db = SQLAlchemy(app)
 
 current_user = None
 
+
 class user_details(db.Model):
     # sno,username,password,fullName,email
     sno = db.Column(db.Integer, primary_key=True)
@@ -16,6 +17,14 @@ class user_details(db.Model):
     password = db.Column(db.String(30), nullable=False)
     fullname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(40), unique=True, nullable=False)
+
+
+class Feedback(db.Model):
+    sno = db.Column(db.Integer, primary_key=True)
+    fullname = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(40), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    message = db.Column(db.String(3000), nullable=False)
 
 
 def user_exists(username):
@@ -28,19 +37,30 @@ def user_exists(username):
 
 @app.route("/")
 def homepage():
-    return render_template('homepage.html', current_user = current_user)
+    username = request.cookies.get('username')
+    return render_template('homepage.html', current_user = username)
 
 @app.route("/login_signup")
 def login_signup():
-    global current_user
-    if(current_user):
+    username = request.cookies.get('username')
+    if(username):
         return redirect('/')
     else:
         return render_template('login_signup.html')
 
 @app.route("/feedback", methods = ['GET','POST'])
 def feedback():
-    return render_template('feedback.html')
+    if(request.method=='POST'):
+        fullname = request.form.get('fullname')
+        email = request.form.get('email')
+        rating = request.form.get('stars')
+        message = request.form.get('message')
+        entry = Feedback(fullname=fullname, email=email, rating=rating, message=message)
+        db.session.add(entry)
+        db.session.commit()
+        return redirect('/')
+    else:
+        return render_template('feedback.html')
 
 @app.route("/login", methods = ['POST'])
 def login():
@@ -50,13 +70,16 @@ def login():
     user = user_details.query.filter_by(email=email).first()
     if(user):
         if(password == user.password):
-            global current_user
-            current_user = user.username
-            return redirect('/')
+            flash("Successful login")
+            resp = make_response(redirect('/'))
+            resp.set_cookie('username', user.username)
+            return resp
         else:
-            return ("Invalid email or password")
+            flash('Incorrect Password')
+            return redirect(url_for('login_signup'))
     else:
-        return ("Invalid email or password")
+        flash('User does not exist')
+        return redirect(url_for('login_signup'))
 
 @app.route("/signup", methods = ['POST'])
 def signup():
@@ -71,28 +94,29 @@ def signup():
     elif(user_exists(username)):
         return render_template('login_signup.html')
     else:
-        global current_user
-        current_user = username
         entry = user_details(username=username, fullname=fullname, email=email, password=password)
         db.session.add(entry)
         db.session.commit()
-        return redirect('/')
+        resp = make_response(redirect('/'))
+        resp.set_cookie('username', username)
+        return resp
 
 @app.route("/logout")
 def logout():
-    global current_user
-    current_user = None
-    return redirect('/')
-
+    resp = make_response(redirect('/'))
+    resp.delete_cookie('username')
+    return resp
 
 @app.route("/Game_of_life")
 def Game_of_life():
-    return render_template('Game of life.html', current_user = current_user)
+    current_user = request.cookies.get('username')
+    return render_template('Game of life.html', current_user=current_user)
 
 @app.route("/users/<string:username>")
 def displayProfile(username):
+    current_user = request.cookies.get('username')
     if(user_exists(username)):
-        return render_template('profile.html', username=username, current_user = current_user)
+        return render_template('profile.html', username=username, current_user=current_user)
     else:
         return ("Invalid user")
 app.run()
