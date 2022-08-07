@@ -1,17 +1,22 @@
 {% extends "layout.html" %}
 {% block title %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
 <style>
     .container {
-  position: relative;
-  width: 100%;
+      display: flex;
+      flex-direction: row;
+  /* position: relative; */
+  /* width: 100%; */
 }
 
-.container img {
-  width: 100%;
+/* .container img {
+  width: 50em;
   height: auto;
-}
+} */
 
-.container .btn {
+/* .container .btn {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -25,10 +30,39 @@
   cursor: pointer;
   border-radius: 5px;
   text-align: center;
-}
+} */
 
-.container .btn:hover {
+/* .container .btn:hover {
   background-color: black;
+} */
+/* .image .info{
+  width: 25em;
+  height: 10em;
+  border-radius: 2em;
+
+} */
+.info{
+  background: rgb(227, 187, 187);
+  padding: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.btn{
+  color: white;
+  background: cornflowerblue;
+  padding: 0.6em 2em;
+  font-size: 1.2em;
+  border-radius: 10px;
+  transition: all 500ms;
+}
+.btn:hover{
+  background: rgb(40, 88, 178);
+  font-size: 1.4em;
+}
+.play{
+  margin: 1em auto 0.5em auto;
 }
 </style>
 <title>Homepage</title>
@@ -37,8 +71,27 @@
 
 <body>
     <div class="container">
-        <img src={{url_for('static', filename='fire-and-ice-with-spark-concept-on-black-background-free-video.jpg')}}>
-        <a href = "/Game_of_life" class="btn">P L A Y</a>
+        <div class="image" style="padding: 60px;background-image: 'IITISoc-Web2-GameOfLife\static\bg2 (1).jpg';">
+          <img style="width: 600px; height:400px; border-radius: 20px;" src={{url_for('static', filename='wall.jpg')}}>
+        </div>
+        <div class="info">
+          <div style="border-radius: 20px; padding:40px; background-color: rgba(78, 197, 218, 0.516);">
+              <div style="width:fit-content; margin: 0.3em auto 0.6em auto;font-family: 'Dancing Script', cursive;font-size: 3em;">Game Of Life</div>
+              <div>The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970. It is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input.</div>
+              <div>
+                <div style="width:fit-content;margin: 0.46em auto 0.2em auto; font-size:2em">Rules:</div>
+                <ul>
+                  <li>Any live cell with two or three live neighbours survives.</li>
+                  <li>Any dead cell with three live neighbours becomes a live cell.</li>
+                  <li>All other live cells die in the next generation. Similarly, all other dead cells stay dead.</li>
+                </ul>
+              </div>
+              
+          </div>
+          <div class="play">
+            <a href = "/Game_of_life" class="btn" style="text-decoration:none;">PLAY</a>
+          </div>
+        </div>
     </div>
 </body>
 
