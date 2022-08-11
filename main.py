@@ -107,6 +107,11 @@ def logout():
     resp.delete_cookie('username')
     return resp
 
+
+@app.route("/about")
+def about():
+    return render_template('abtus1.html')
+
 @app.route("/Game_of_life")
 def Game_of_life():
     current_user = request.cookies.get('username')
