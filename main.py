@@ -7,8 +7,6 @@ app.secret_key = "abc"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/iitisoc_database'
 db = SQLAlchemy(app)
 
-current_user = None
-
 
 class user_details(db.Model):
     # sno,username,password,fullName,email
@@ -39,6 +37,9 @@ def user_exists(username):
 def homepage():
     username = request.cookies.get('username')
     return render_template('homepage.html', current_user = username)
+@app.route("/about")
+def imadeit():
+    return render_template('abtus1.html')
 
 @app.route("/login_signup")
 def login_signup():
